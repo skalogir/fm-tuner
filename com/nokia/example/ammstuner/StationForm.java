@@ -78,6 +78,9 @@ public class StationForm extends Form implements CommandListener, ItemCommandLis
         }
     }
 
+    /**
+     * @see javax.microedition.lcdui.ItemCommandListener#commandAction(Command, Item)
+     */	    
     public void commandAction(Command c, Item item) {
         if (item.equals(selectButton)) {
             Integer frequency = (Integer)midlet.tuner.frequencyVector.elementAt(stationIndex);

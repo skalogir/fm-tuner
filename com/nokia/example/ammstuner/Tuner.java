@@ -123,6 +123,10 @@ public class Tuner {
         thread.start();
     }
 
+    /**
+     * Gets the TunerControl's minimum and maximum frequencies and saves them to Integer array.
+     * @return Integer array with min and max frequencies
+     */
     public static int[] getMinAndMaxFrequencies() {        
         Player player;
         int[] freqs = new int[2];

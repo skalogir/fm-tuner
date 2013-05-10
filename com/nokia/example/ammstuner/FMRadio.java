@@ -171,6 +171,9 @@ public class FMRadio extends MIDlet implements CommandListener, ItemStateListene
         readStationsFromRMS();        
     }
     
+    /**
+     * Initializes the MIDlet main UI: the Form, CustomItems and Commands, and shows the Form. 
+     */
     private void initUI() {
         form = new Form("FM Radio");
         frequencyItem = new FrequencyBarItem(this);
@@ -180,7 +183,7 @@ public class FMRadio extends MIDlet implements CommandListener, ItemStateListene
         form.append(frequencyItem);
         form.append(infoItem);
         form.append(upDownButtonsItem);
-        //form.append(strengthItem); // Might not work
+        //form.append(strengthItem); 
         
         startCommand = new Command("Start radio", Command.SCREEN, 1);
         stopCommand = new Command("Stop radio", Command.SCREEN, 2);
@@ -272,25 +275,46 @@ public class FMRadio extends MIDlet implements CommandListener, ItemStateListene
         }
     }
     
+    /**
+     * Shows the main screen.
+     */
     protected void showTunerForm() {
         Display.getDisplay(this).setCurrent(form);
     }
     
+    /**
+     * Updates the info text and the FrequencyItem, when the frequency has been changed.
+     * @param frequency the updated frequency 
+     */
     protected void updateUI(int frequency) {
         infoItem.setText("Selected frequency: " + frequency);
         frequencyItem.updateFrequency(frequency);
     }
     
+    /**
+     * Shows the frequency list, which have been saved to Vector (and RecordStore). This method is called, when 
+     * a station name has been modified.
+     * @param index Index of the modified frequency.
+     * @param newName The new name, which has been set on StationForm.
+     */
     protected void showFrequencyList(int index, String newName) {
         int frequency = ((Integer)this.tuner.frequencyVector.elementAt(index)).intValue();
         frequencyList.set(index, newName + " (" + ((double)frequency / 10000) + " MHz)", null);
         Display.getDisplay(this).setCurrent(frequencyList);
     }
 
+    /**
+     * Shows the frequency list, which have been saved to Vector (and RecordStore). This method is called, when 
+     * a station name has not been modified.
+     */
     protected void showFrequencyList() {
         Display.getDisplay(this).setCurrent(frequencyList);
     }    
     
+    /**
+     * Creates a String array of the frequencies saved to Vector.
+     * @return the String array of the saved frequencies
+     */
     private String[] listFrequencies() {
         Vector frequencies = tuner.frequencyVector;
         if (frequencies == null) return null;
@@ -308,6 +332,10 @@ public class FMRadio extends MIDlet implements CommandListener, ItemStateListene
         return freqStrings;
     }
     
+    /**
+     * Creates a String array of the station names saved to Vector.
+     * @return the String array of the saved names
+     */
     private String[] listStationNames() {
         Vector names = tuner.nameVector;
         if (names == null) return null;
@@ -324,6 +352,10 @@ public class FMRadio extends MIDlet implements CommandListener, ItemStateListene
         return stationStrings;    
     }
     
+    /**
+     * Saves the station frequencies and names to RecordStore.
+     * @param stations Vector, where the frequencies have been stored.
+     */
     private void saveStationsToRMS(Vector stations) {
         rmsManager = new RMSManager(this, RECORDSTORENAME);
         rmsManager.openRecStore();
@@ -337,6 +369,9 @@ public class FMRadio extends MIDlet implements CommandListener, ItemStateListene
         rmsManager.closeRecStore();
     }
     
+    /**
+     * Read the station names and frequencies from RecordStore.
+     */
     private void readStationsFromRMS() {
         allStrings = new Vector();
         rmsManager = new RMSManager(this, RECORDSTORENAME);
@@ -355,6 +390,11 @@ public class FMRadio extends MIDlet implements CommandListener, ItemStateListene
         }
     }
     
+    /**
+     * Shows an Alert.
+     * @param title The Alert title
+     * @param text The Alert text content
+     */
     protected void showError(String title, String text) {
         Alert alert = new Alert(title, text, null, AlertType.ERROR);
         alert.setTimeout(Alert.FOREVER);
